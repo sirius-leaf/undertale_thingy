@@ -1,0 +1,639 @@
+[gd_scene load_steps=38 format=3 uid="uid://bte3mppuixjtp"]
+
+[ext_resource type="Script" uid="uid://cv2n3trgbtcdc" path="res://scripts/ui_controller.gd" id="1_yn12c"]
+[ext_resource type="Texture2D" uid="uid://c43w6o3udeei7" path="res://Assets/sprites/text_box.png" id="2_nhds7"]
+[ext_resource type="Texture2D" uid="uid://cjv6bt5je4dsx" path="res://Assets/sprites/attack_accuracy.png" id="3_y8umb"]
+[ext_resource type="Texture2D" uid="uid://dotdks37t6abw" path="res://Assets/sprites/buttons.png" id="4_acboe"]
+[ext_resource type="Texture2D" uid="uid://br84a3hidr828" path="res://Assets/sprites/attack_point.png" id="4_nhds7"]
+[ext_resource type="FontFile" uid="uid://cvtskentvm3va" path="res://Assets/fonts/crypt-of-tomorrow-ut-font-no-rus.ttf" id="5_x1cnf"]
+[ext_resource type="Texture2D" uid="uid://dllu5cwf0ptmj" path="res://Assets/sprites/damn_bird.png" id="6_fmt28"]
+[ext_resource type="Texture2D" uid="uid://b7hlbwhg4x07m" path="res://Assets/sprites/soul.png" id="7_gr4uq"]
+[ext_resource type="Script" uid="uid://fgo2tp7pon7l" path="res://scripts/damn_bird_controller.gd" id="7_y8umb"]
+[ext_resource type="Script" uid="uid://b50o5txcocobh" path="res://scripts/soul_controller.gd" id="8_756dn"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_u3hps"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u3hps"]
+bg_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_knq2r"]
+bg_color = Color(0, 1, 0, 1)
+
+[sub_resource type="Animation" id="Animation_y8umb"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(0, 0, 8, 60)]
+}
+
+[sub_resource type="Animation" id="Animation_nhds7"]
+resource_name = "attack"
+length = 0.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Rect2(0, 0, 8, 60), Rect2(8, 0, 8, 60)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_acboe"]
+_data = {
+&"RESET": SubResource("Animation_y8umb"),
+&"attack": SubResource("Animation_nhds7")
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_y8umb"]
+font_size = 22
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_82d4v"]
+texture = ExtResource("4_acboe")
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(57, 1, 55, 21)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8jpra"]
+texture = ExtResource("4_acboe")
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(57, 1, 55, 21)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gi4ws"]
+texture = ExtResource("4_acboe")
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(57, 1, 55, 21)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lxtp4"]
+texture = ExtResource("4_acboe")
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(1, 1, 55, 21)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jgxat"]
+texture = ExtResource("4_acboe")
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(57, 23, 55, 21)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_u3hps"]
+texture = ExtResource("4_acboe")
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(1, 23, 55, 21)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_knq2r"]
+texture = ExtResource("4_acboe")
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(57, 45, 55, 21)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hh1om"]
+texture = ExtResource("4_acboe")
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(1, 45, 55, 21)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_280mc"]
+texture = ExtResource("4_acboe")
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(57, 67, 55, 21)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fcob3"]
+texture = ExtResource("4_acboe")
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(1, 67, 55, 21)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lxtp4"]
+bg_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8jpra"]
+bg_color = Color(1, 1, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_gi4ws"]
+font = ExtResource("5_x1cnf")
+font_size = 15
+
+[sub_resource type="LabelSettings" id="LabelSettings_jgxat"]
+font_size = 20
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_uiy1c"]
+
+[sub_resource type="Animation" id="Animation_jgxat"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="Animation" id="Animation_gi4ws"]
+resource_name = "damn_bird_idle"
+length = 2.0
+loop_mode = 1
+step = 0.125
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 4.49, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1, 2)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_u3hps"]
+_data = {
+&"RESET": SubResource("Animation_jgxat"),
+&"damn_bird_idle": SubResource("Animation_gi4ws")
+}
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y8umb"]
+bg_color = Color(0.16, 0.16, 0.16, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_u3hps"]
+radius = 8.0
+
+[node name="Game" type="Node2D"]
+
+[node name="Ui" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="MainUi" type="Control" parent="Ui"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_yn12c")
+
+[node name="TextBox" type="NinePatchRect" parent="Ui/MainUi"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = 4.34
+offset_right = 300.0
+offset_bottom = 152.34
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_nhds7")
+region_rect = Rect2(0, 0, 32, 32)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="Barriers" type="Control" parent="Ui/MainUi/TextBox"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RightBarrier" type="Control" parent="Ui/MainUi/TextBox/Barriers"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 557.0
+offset_top = 53.66
+offset_right = 557.0
+offset_bottom = 53.66
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Ui/MainUi/TextBox/Barriers/RightBarrier"]
+position = Vector2(-560, -59)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ui/MainUi/TextBox/Barriers/RightBarrier/StaticBody2D"]
+rotation = -1.5708
+shape = SubResource("WorldBoundaryShape2D_u3hps")
+
+[node name="LeftBarrier" type="Control" parent="Ui/MainUi/TextBox/Barriers"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 3.0
+offset_top = 53.66
+offset_right = 3.0
+offset_bottom = 53.66
+grow_vertical = 2
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Ui/MainUi/TextBox/Barriers/LeftBarrier"]
+position = Vector2(0, -61)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ui/MainUi/TextBox/Barriers/LeftBarrier/StaticBody2D"]
+rotation = 1.5708
+shape = SubResource("WorldBoundaryShape2D_u3hps")
+
+[node name="Target" type="Control" parent="Ui/MainUi/TextBox"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DamnBirdSelect" type="Button" parent="Ui/MainUi/TextBox/Target"]
+layout_mode = 0
+offset_left = 47.0
+offset_top = 11.66
+offset_right = 213.0
+offset_bottom = 50.66
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath(".")
+mouse_filter = 2
+theme_override_font_sizes/font_size = 30
+button_mask = 0
+text = "* DAMN!!! Bird"
+flat = true
+
+[node name="DamnBirdHealthBar" type="ProgressBar" parent="Ui/MainUi/TextBox/Target/DamnBirdSelect"]
+layout_mode = 0
+offset_left = 195.0
+offset_top = 14.0
+offset_right = 312.0
+offset_bottom = 28.0
+theme_override_styles/background = SubResource("StyleBoxFlat_u3hps")
+theme_override_styles/fill = SubResource("StyleBoxFlat_knq2r")
+max_value = 1500.0
+value = 100.0
+show_percentage = false
+
+[node name="AttackAccuracy" type="Control" parent="Ui/MainUi/TextBox"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AttackAccuracyTexture" type="TextureRect" parent="Ui/MainUi/TextBox/AttackAccuracy"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 28.0
+offset_top = 20.0
+offset_right = -28.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_y8umb")
+
+[node name="AttackPoint" type="Control" parent="Ui/MainUi/TextBox/AttackAccuracy"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = -0.339996
+offset_bottom = -0.339996
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Sprite" type="Sprite2D" parent="Ui/MainUi/TextBox/AttackAccuracy/AttackPoint"]
+scale = Vector2(2, 2)
+texture = ExtResource("4_nhds7")
+region_enabled = true
+region_rect = Rect2(0, 0, 8, 60)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Ui/MainUi/TextBox/AttackAccuracy/AttackPoint/Sprite"]
+libraries = {
+&"": SubResource("AnimationLibrary_acboe")
+}
+
+[node name="InfoText" type="Control" parent="Ui/MainUi/TextBox"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Star" type="Label" parent="Ui/MainUi/TextBox/InfoText"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = 18.0
+offset_right = -18.0
+offset_bottom = -19.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "*
+"
+label_settings = SubResource("LabelSettings_y8umb")
+autowrap_mode = 2
+
+[node name="MainText" type="Label" parent="Ui/MainUi/TextBox/InfoText/Star"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 23.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+label_settings = SubResource("LabelSettings_y8umb")
+autowrap_mode = 2
+
+[node name="ActText" type="Control" parent="Ui/MainUi/TextBox"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Star" type="Label" parent="Ui/MainUi/TextBox/ActText"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = 18.0
+offset_right = -18.0
+offset_bottom = -19.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "*
+"
+label_settings = SubResource("LabelSettings_y8umb")
+autowrap_mode = 2
+
+[node name="MainText" type="Label" parent="Ui/MainUi/TextBox/ActText/Star"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 23.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "DAMN Bird!!! - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip"
+label_settings = SubResource("LabelSettings_y8umb")
+autowrap_mode = 2
+
+[node name="ActionButtons" type="Control" parent="Ui/MainUi"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 43.29
+offset_bottom = 43.29
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FightButton" type="Button" parent="Ui/MainUi/ActionButtons"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -92.0
+offset_right = -245.0
+offset_bottom = -71.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(2, 2)
+size_flags_horizontal = 3
+focus_neighbor_left = NodePath("../MercyButton")
+focus_neighbor_right = NodePath("../ActButton")
+mouse_filter = 2
+theme_override_styles/focus = SubResource("StyleBoxTexture_82d4v")
+theme_override_styles/hover = SubResource("StyleBoxTexture_8jpra")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_gi4ws")
+theme_override_styles/normal = SubResource("StyleBoxTexture_lxtp4")
+button_mask = 0
+
+[node name="ActButton" type="Button" parent="Ui/MainUi/ActionButtons"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -136.7
+offset_top = -92.0
+offset_right = -81.7
+offset_bottom = -71.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(2, 2)
+size_flags_horizontal = 3
+focus_neighbor_left = NodePath("../FightButton")
+focus_neighbor_right = NodePath("../ItemButton")
+mouse_filter = 2
+theme_override_styles/focus = SubResource("StyleBoxTexture_jgxat")
+theme_override_styles/hover = SubResource("StyleBoxTexture_jgxat")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_jgxat")
+theme_override_styles/normal = SubResource("StyleBoxTexture_u3hps")
+button_mask = 0
+
+[node name="ItemButton" type="Button" parent="Ui/MainUi/ActionButtons"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 26.6
+offset_top = -92.0
+offset_right = 81.6
+offset_bottom = -71.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(2, 2)
+size_flags_horizontal = 3
+focus_neighbor_left = NodePath("../ActButton")
+focus_neighbor_right = NodePath("../MercyButton")
+mouse_filter = 2
+theme_override_styles/focus = SubResource("StyleBoxTexture_knq2r")
+theme_override_styles/hover = SubResource("StyleBoxTexture_knq2r")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_knq2r")
+theme_override_styles/normal = SubResource("StyleBoxTexture_hh1om")
+button_mask = 0
+
+[node name="MercyButton" type="Button" parent="Ui/MainUi/ActionButtons"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 190.0
+offset_top = -92.0
+offset_right = 245.0
+offset_bottom = -71.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(2, 2)
+size_flags_horizontal = 3
+focus_neighbor_left = NodePath("../ItemButton")
+focus_neighbor_right = NodePath("../FightButton")
+mouse_filter = 2
+theme_override_styles/focus = SubResource("StyleBoxTexture_280mc")
+theme_override_styles/hover = SubResource("StyleBoxTexture_280mc")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_280mc")
+theme_override_styles/normal = SubResource("StyleBoxTexture_fcob3")
+button_mask = 0
+
+[node name="HealthInfo" type="Control" parent="Ui/MainUi"]
+anchors_preset = 0
+offset_left = -51.0
+offset_top = 7.0
+offset_right = -11.0
+offset_bottom = 47.0
+
+[node name="HealthBar" type="ProgressBar" parent="Ui/MainUi/HealthInfo"]
+layout_mode = 0
+offset_left = 309.0
+offset_top = 393.0
+offset_right = 343.0
+offset_bottom = 415.0
+theme_override_styles/background = SubResource("StyleBoxFlat_lxtp4")
+theme_override_styles/fill = SubResource("StyleBoxFlat_8jpra")
+max_value = 30.0
+value = 10.0
+show_percentage = false
+
+[node name="HealthLabel" type="Label" parent="Ui/MainUi/HealthInfo"]
+layout_mode = 0
+offset_left = 353.0
+offset_top = 396.0
+offset_right = 559.0
+offset_bottom = 416.0
+text = "30 / 30"
+label_settings = SubResource("LabelSettings_gi4ws")
+
+[node name="HPBarLabel" type="Label" parent="Ui/MainUi/HealthInfo"]
+layout_mode = 0
+offset_left = 287.83
+offset_top = 393.295
+offset_right = 340.83
+offset_bottom = 425.295
+theme_override_font_sizes/font_size = 22
+text = "HP"
+label_settings = SubResource("LabelSettings_jgxat")
+
+[node name="Control" type="Control" parent="Ui/MainUi"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -74.0
+offset_right = 74.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="Bondary" type="StaticBody2D" parent="."]
+position = Vector2(318, 385)
+
+[node name="ColliderBottom" type="CollisionShape2D" parent="Bondary"]
+position = Vector2(0, 4)
+shape = SubResource("WorldBoundaryShape2D_uiy1c")
+
+[node name="ColliderTop" type="CollisionShape2D" parent="Bondary"]
+position = Vector2(0, -138)
+rotation = 3.14159
+shape = SubResource("WorldBoundaryShape2D_uiy1c")
+
+[node name="DamnBird" type="Node2D" parent="."]
+position = Vector2(323, 50)
+scale = Vector2(2, 2)
+script = ExtResource("7_y8umb")
+
+[node name="Body" type="Sprite2D" parent="DamnBird"]
+texture = ExtResource("6_fmt28")
+region_enabled = true
+region_rect = Rect2(1, 1, 83, 45)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="DamnBird/Body"]
+libraries = {
+&"": SubResource("AnimationLibrary_u3hps")
+}
+autoplay = "damn_bird_idle"
+
+[node name="Leg" type="Sprite2D" parent="DamnBird"]
+position = Vector2(3.5, 58)
+texture = ExtResource("6_fmt28")
+region_enabled = true
+region_rect = Rect2(1, 47, 76, 73)
+
+[node name="DamnBirdHealthBar2" type="ProgressBar" parent="DamnBird"]
+visible = false
+offset_left = -78.0
+offset_top = 61.5
+offset_right = 74.0
+offset_bottom = 68.5
+theme_override_styles/background = SubResource("StyleBoxFlat_y8umb")
+theme_override_styles/fill = SubResource("StyleBoxFlat_knq2r")
+max_value = 1500.0
+value = 100.0
+show_percentage = false
+
+[node name="Sprite2" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(51, 277)
+scale = Vector2(2, 2)
+texture = ExtResource("7_gr4uq")
+
+[node name="Soul" type="CharacterBody2D" parent="." groups=["soul"]]
+position = Vector2(38, 454)
+script = ExtResource("8_756dn")
+
+[node name="Sprite" type="Sprite2D" parent="Soul"]
+scale = Vector2(2, 2)
+texture = ExtResource("7_gr4uq")
+
+[node name="Collider" type="CollisionShape2D" parent="Soul"]
+shape = SubResource("CircleShape2D_u3hps")
+
+[connection signal="button_down" from="Ui/MainUi/TextBox/Target/DamnBirdSelect" to="Ui/MainUi" method="_on_damn_bird_select_button_down"]
+[connection signal="button_down" from="Ui/MainUi/ActionButtons/FightButton" to="Ui/MainUi" method="_on_fight_button_button_down"]
+[connection signal="button_down" from="Ui/MainUi/ActionButtons/ActButton" to="Ui/MainUi" method="_on_act_button_button_down"]

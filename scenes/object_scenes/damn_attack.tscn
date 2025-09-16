@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://6mpwunnqwfsm"]
+
+[ext_resource type="Script" uid="uid://d4b51as4n65lh" path="res://scripts/damn_attack_movement.gd" id="1_mw655"]
+[ext_resource type="AudioStream" uid="uid://c8lhteg8mruxp" path="res://Assets/sound_effects/damn_sfx.mp3" id="2_n8gbk"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_y8umb"]
+font_size = 32
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y8umb"]
+size = Vector2(224, 14)
+
+[node name="DamnAttack" type="Area2D"]
+script = ExtResource("1_mw655")
+
+[node name="Label" type="Label" parent="."]
+offset_top = -16.0
+offset_right = 226.0
+offset_bottom = 16.0
+text = "DAMN!!!!!!!!!!!!!!"
+label_settings = SubResource("LabelSettings_y8umb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(112, 1)
+shape = SubResource("RectangleShape2D_y8umb")
+
+[node name="DamnSfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_n8gbk")
+autoplay = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="finished" from="DamnSfx" to="." method="_on_damn_sfx_finished"]

@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://bx23t520hgc0u"]
+
+[ext_resource type="Texture2D" uid="uid://cn3v66gyklj88" path="res://Assets/sprites/attack_warning_panel.png" id="1_g7n60"]
+[ext_resource type="Script" uid="uid://cimvthg5w84bm" path="res://scripts/spawn_attack.gd" id="2_pcgne"]
+[ext_resource type="PackedScene" uid="uid://6mpwunnqwfsm" path="res://scenes/object_scenes/damn_attack.tscn" id="3_xmise"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_x1cnf"]
+font_size = 22
+
+[node name="DamnAttackWarning" type="NinePatchRect" groups=["attack_warning"]]
+offset_right = 148.0
+offset_bottom = 28.0
+texture = ExtResource("1_g7n60")
+patch_margin_left = 1
+patch_margin_top = 1
+patch_margin_right = 1
+patch_margin_bottom = 1
+script = ExtResource("2_pcgne")
+attack = ExtResource("3_xmise")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -8.0
+offset_right = 20.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "!"
+label_settings = SubResource("LabelSettings_x1cnf")
+horizontal_alignment = 1
+vertical_alignment = 1
