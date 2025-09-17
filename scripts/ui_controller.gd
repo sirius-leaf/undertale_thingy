@@ -2,15 +2,26 @@ class_name UiController
 extends Control
 
 
-enum Action { NONE, FIGHT, ACT, ITEM, MERCY, FIGHT_START, ACT_SELECT, ENEMY_TURN }
+enum Action {
+	NONE, FIGHT, ACT, ITEM, MERCY, FIGHT_START, ACT_SELECT, DISPLAY_ACT, SELECT_ITEM, ENEMY_TURN
+}
 
 const ATTACK_SPEED = 300.0
+const DAMN_BIRD_DIALOGUE = preload("res://dialogue/damn_bird_dialogue.dialogue")
 
-var selected_action: Action
-var attack_start := true
-var accept_input := false
-var delay := 0.0
-var tween_start := true
+var _selected_action: Action
+var _attack_start := true
+var _accept_input := false
+var _delay := 0.0
+var _tween_start := true
+var _buttons: Array[Button]
+var _act_buttons: Array[Button]
+var _last_selected_act := 0
+var _dialogue_finished := false
+var _enemy_dialogue_finished := false
+var _fight_ready := false
+var _item_select_buttons: Array[Button]
+var _empty_item := false
 
 @onready var target: Control = $TextBox/Target
 @onready var soul: SoulController = $"../../Soul"
@@ -22,13 +33,6 @@ var tween_start := true
 @onready var health_bar: ProgressBar = $HealthInfo/HealthBar
 @onready var health_label: Label = $HealthInfo/HealthLabel
 
-@onready var buttons: Array[Button] = [
-	$ActionButtons/FightButton, 
-	$ActionButtons/ActButton,
-	$ActionButtons/ItemButton,
-	$ActionButtons/MercyButton
-]
-
 
 func _ready() -> void:
 	damn_bird_health_bar.value = damn_bird.health
@@ -36,23 +40,74 @@ func _ready() -> void:
 	health_bar.value = soul.health
 	attack_point.position.x = 12.0
 	
+	_update_soul_health_bar()
+	
+	for node in $ActionButtons.get_children(): _buttons.append(node)
+	for node in $TextBox/ActSelect.get_children(): _act_buttons.append(node)
+	for node in $TextBox/ItemSelect.get_children(): if node is Button: 
+		_item_select_buttons.append(node)
+	
+	$"../../DamnBird/DialogueBaloon/NinePatchRect/DialogueLabel".finished_typing.\
+			connect(_on_enemy_dialogue_finished)
+	
 	$ActionButtons/FightButton.grab_focus()
 
 
 func _process(delta: float) -> void:
+	if Input.is_key_pressed(KEY_R): get_tree().reload_current_scene()
+	elif Input.is_key_pressed(KEY_ESCAPE): get_tree().quit()
+		
 	
-	match selected_action:
+	match _selected_action:
+		Action.FIGHT:
+			_back_to_main_act($ActionButtons/FightButton)
 		Action.FIGHT_START:
 			_attack(delta)
 			_attack_end(delta)
+		Action.ACT:
+			_back_to_main_act($ActionButtons/ActButton)
+		Action.ACT_SELECT:
+			for item in _act_buttons:
+				if item.has_focus():
+					soul.global_position = item.global_position + Vector2(-16.0, 21.0)
+					_last_selected_act = _act_buttons.find(item)
+					break
+			
+			if Input.is_action_just_pressed("ui_cancel"):
+				target.visible = true
+				$TextBox/ActSelect.visible = false
+				_selected_action = Action.ACT
+				$TextBox/Target/DamnBirdSelect.grab_focus()
+				_act_buttons[_last_selected_act].release_focus()
+				soul.global_position = $TextBox/Target/DamnBirdSelect.global_position \
+						+ Vector2(-16.0, 21.0)
+		Action.DISPLAY_ACT:
+			if Input.is_action_just_pressed("ui_accept") and _dialogue_finished:
+				_selected_action = Action.ENEMY_TURN
+				$TextBox/ActText.visible = false
+				_fight_transition_tween(Action.ACT)
+		Action.ITEM:
+			for item in _item_select_buttons:
+				if item.has_focus():
+					soul.global_position = item.global_position + Vector2(-16.0, 21.0)
+					$TextBox/ItemSelect/ItemInfo.text = soul.items[_item_select_buttons.find(item)][2]
+					break
+			
+			_back_to_main_act($ActionButtons/ItemButton)
 		Action.ENEMY_TURN:
-			health_bar.value = soul.health
-			health_label.text = str(soul.health) + " / 30"
+			_update_soul_health_bar()
+			
+			if Input.is_action_just_pressed("ui_accept") and _enemy_dialogue_finished and \
+					_fight_ready:
+				soul.visible = true
+				soul.attack = true
+				$"../../DamnBird/DialogueBaloon".visible = false
 		Action.NONE:
 			target.visible = false
 			soul.visible = true
+			$TextBox/Target/DamnBirdSelect/DamnBirdHealthBar.visible = true
 			
-			for item in buttons:
+			for item in _buttons:
 				if item.has_focus():
 					soul.global_position = item.global_position + Vector2(16.0, 22.0)
 					break
@@ -70,15 +125,34 @@ func reset() -> void:
 	soul.visible = false
 
 
+func _update_soul_health_bar() -> void:
+	health_bar.value = soul.health
+	health_label.text = str(soul.health) + " / 30"
+
+
+func _use_item(index: int) -> void:
+	soul.health = min(30, soul.health + soul.items[index][1])
+	_act_button_dialogue(soul.items[index][3])
+	soul.items.pop_at(index)
+	
+	if soul.items.is_empty():
+		var item_button: Button = $ActionButtons/ItemButton
+		_empty_item = true
+		item_button.set_focus_mode(Control.FOCUS_NONE)
+		item_button.disabled = true
+	
+	_update_soul_health_bar()
+
+
 func _attack(delta: float) -> void:
 	if attack_point.position.x < 588.0:
-		if Input.is_action_just_released("ui_accept") and not accept_input:
-			accept_input = true
+		if Input.is_action_just_released("ui_accept") and not _accept_input:
+			_accept_input = true
 		
-		if attack_start:
+		if _attack_start:
 			attack_point.position.x += ATTACK_SPEED * delta
 		
-		if Input.is_action_just_pressed("ui_accept") and accept_input and attack_start:
+		if Input.is_action_just_pressed("ui_accept") and _accept_input and _attack_start:
 			damn_bird.health -= round((300 - abs(attack_point.position.x - 300)) / 300
 					* soul.POWER)
 			damn_bird_health_bar.value = damn_bird.health
@@ -88,62 +162,116 @@ func _attack(delta: float) -> void:
 			$TextBox/AttackAccuracy/AttackPoint/Sprite/AnimationPlayer.play("attack")
 			print(round((300 - abs(attack_point.position.x - 300)) / 300 * soul.POWER))
 			
-			delay = 1.5
-			attack_start = false
-	elif attack_start:
-		delay = 1.5
+			_delay = 1.5
+			_attack_start = false
+	elif _attack_start:
+		_delay = 1.5
 		
 		#damn_bird_health_bar_2.visible = true
 		$TextBox/AttackAccuracy/AttackPoint/Sprite/AnimationPlayer.play("attack")
 		
-		attack_start = false
+		_attack_start = false
 
 
 func _attack_end(delta: float) -> void:
-	if delay > 0:
-		delay -= delta
-	elif not attack_start:
+	if _delay > 0:
+		_delay -= delta
+	elif not _attack_start:
 		attack_point.visible = false
 		damn_bird_health_bar_2.visible = false
 	
-		if tween_start:
-				var tween_size := create_tween()
-				var tween_pos := create_tween()
-				var tween_opacity := create_tween()
-				
-				tween_size.tween_property($TextBox, "size:x", 148.0, 1.0)
-				tween_pos.tween_property($TextBox, "position:x", 246.0, 1.0)
-				tween_opacity.tween_property($TextBox/AttackAccuracy/AttackAccuracyTexture, 
-						"modulate:a", 0.0, 0.5)
-				tween_size.finished.connect(_on_tween_finished)
-				
-				tween_start = false
+		_fight_transition_tween(Action.FIGHT)
+
+
+func _fight_transition_tween(previous_action: Action) -> void:
+	if _tween_start:
+			var tween_size := create_tween()
+			var tween_pos := create_tween()
+			
+			tween_size.tween_property($TextBox, "size:x", 148.0, 0.5)
+			tween_pos.tween_property($TextBox, "position:x", 246.0, 0.5)
+			
+			_start_enemy_dialogue()
+			
+			match previous_action:
+				Action.FIGHT:
+					var tween_opacity := create_tween()
+					tween_opacity.tween_property($TextBox/AttackAccuracy/AttackAccuracyTexture, 
+							"modulate:a", 0.0, 0.3)
+			
+			tween_size.finished.connect(_on_tween_finished)
+			
+			_tween_start = false
+
+
+func _act_button_dialogue(line_name: String) -> void:
+	var dialogue_label := $TextBox/ActText/Star/DialogueLabel
+	
+	$TextBox/ActSelect.visible = false
+	$TextBox/ItemSelect.visible = false
+	$TextBox/ActText.visible = true
+	_selected_action = Action.DISPLAY_ACT
+	
+	dialogue_label.dialogue_line = await DAMN_BIRD_DIALOGUE.\
+			get_next_dialogue_line(line_name)
+	dialogue_label.type_out()
+	soul.global_position = Vector2(-20, -20)
+
+
+func _back_to_main_act(previous_button: Button) -> void:
+	if Input.is_action_just_pressed("ui_cancel"):
+		info_text.visible = true
+		target.visible = false
+		$TextBox/ItemSelect.visible = false
+		_selected_action = Action.NONE
+		previous_button.grab_focus()
+		$TextBox/Target/DamnBirdSelect.release_focus()
+
+
+func _start_enemy_dialogue() -> void:
+	var enemy_dialogue: DialogueLabel = $"../../DamnBird/DialogueBaloon/NinePatchRect/DialogueLabel"
+	
+	$"../../DamnBird/DialogueBaloon".visible = true
+	enemy_dialogue.dialogue_line = await DAMN_BIRD_DIALOGUE.get_next_dialogue_line("start")
+	enemy_dialogue.type_out()
+
+
+func _on_enemy_dialogue_finished():
+	_enemy_dialogue_finished = true
 
 
 func _on_tween_finished():
+	soul.visible = false
 	soul.global_position = Vector2(320.0, 320.0)
-	soul.attack = true
+	_fight_ready = true
 	$TextBox/AttackAccuracy.visible = false
-	selected_action = Action.ENEMY_TURN
+	_selected_action = Action.ENEMY_TURN
 
 
 func _on_tween_finished_reset():
-	attack_start = true
-	accept_input = false
-	delay = 0.0
-	tween_start = true
+	_attack_start = true
+	_accept_input = false
+	_delay = 0.0
+	_tween_start = true
+	_dialogue_finished = false
+	_enemy_dialogue_finished = false
+	_fight_ready = false
 	
 	$ActionButtons/FightButton.grab_focus()
-	selected_action = Action.NONE
+	_selected_action = Action.NONE
 	attack_point.visible = true
 	info_text.visible = true
 	$TextBox/AttackAccuracy/AttackPoint/Sprite/AnimationPlayer.play("RESET")
 
 
+func _on_dialogue_label_finished_typing() -> void:
+	_dialogue_finished = true
+
+
 func _on_fight_button_button_down() -> void:
 	info_text.visible = false
 	target.visible = true
-	selected_action = Action.FIGHT
+	_selected_action = Action.FIGHT
 	$ActionButtons/FightButton.release_focus()
 	$TextBox/Target/DamnBirdSelect.grab_focus()
 	soul.global_position = $TextBox/Target/DamnBirdSelect.global_position + Vector2(-16.0, 21.0)
@@ -152,23 +280,62 @@ func _on_fight_button_button_down() -> void:
 func _on_act_button_button_down() -> void:
 	info_text.visible = false
 	target.visible = true
-	selected_action = Action.ACT
+	$TextBox/Target/DamnBirdSelect/DamnBirdHealthBar.visible = false
+	_selected_action = Action.ACT
 	$ActionButtons/ActButton.release_focus()
 	$TextBox/Target/DamnBirdSelect.grab_focus()
 	soul.global_position = $TextBox/Target/DamnBirdSelect.global_position + Vector2(-16.0, 21.0)
 
 
+func _on_item_button_button_down() -> void:
+	for index in range(4):
+		if index <= soul.items.size() - 1: _item_select_buttons[index].text = soul.items[index][0]
+		else: 
+			#_item_select_buttons[index].disabled = true
+			_item_select_buttons[index].visible = false
+	
+	info_text.visible = false
+	$TextBox/ItemSelect.visible = true
+	_selected_action = Action.ITEM
+	$ActionButtons/ItemButton.release_focus()
+	$TextBox/ItemSelect/Item1Button.grab_focus()
+	soul.global_position = $TextBox/ItemSelect/Item1Button.global_position + Vector2(-16.0, 21.0)
+
 func _on_damn_bird_select_button_down() -> void:
 	target.visible = false
+	$TextBox/Target/DamnBirdSelect.release_focus()
 	
-	match selected_action:
+	match _selected_action:
 		Action.FIGHT:
-			selected_action = Action.FIGHT_START
+			_selected_action = Action.FIGHT_START
 			$TextBox/AttackAccuracy.visible = true
 			attack_point.position.x = 12.0
+			soul.global_position = Vector2(-20, -20)
 		Action.ACT:
-			selected_action = Action.ACT_SELECT
-			
-	
-	soul.global_position = Vector2(-20, -20)
-	$TextBox/Target/DamnBirdSelect.release_focus()
+			_selected_action = Action.ACT_SELECT
+			$TextBox/ActSelect.visible = true
+			_act_buttons[_last_selected_act].grab_focus()
+
+
+func _on_check_button_button_down() -> void:
+	_act_button_dialogue("check")
+
+
+func _on_act_1_button_button_down() -> void:
+	_act_button_dialogue("act1")
+
+
+func _on_item_1_button_button_down() -> void:
+	_use_item(0)
+
+
+func _on_item_2_button_button_down() -> void:
+	_use_item(1)
+
+
+func _on_item_3_button_button_down() -> void:
+	_use_item(2)
+
+
+func _on_item_4_button_button_down() -> void:
+	_use_item(3)

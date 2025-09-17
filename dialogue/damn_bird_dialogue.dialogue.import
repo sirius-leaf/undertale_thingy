@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://tblnlnnkmfeb"
+path="res://.godot/imported/damn_bird_dialogue.dialogue-ffb1adfc66ea68b0c576f410e566ae28.tres"
+
+[deps]
+
+source_file="res://dialogue/damn_bird_dialogue.dialogue"
+dest_files=["res://.godot/imported/damn_bird_dialogue.dialogue-ffb1adfc66ea68b0c576f410e566ae28.tres"]
+
+[params]
+
+defaults=true

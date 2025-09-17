@@ -1,17 +1,26 @@
-[gd_scene load_steps=38 format=3 uid="uid://bte3mppuixjtp"]
+[gd_scene load_steps=45 format=3 uid="uid://bte3mppuixjtp"]
 
 [ext_resource type="Script" uid="uid://cv2n3trgbtcdc" path="res://scripts/ui_controller.gd" id="1_yn12c"]
 [ext_resource type="Texture2D" uid="uid://c43w6o3udeei7" path="res://Assets/sprites/text_box.png" id="2_nhds7"]
 [ext_resource type="Texture2D" uid="uid://cjv6bt5je4dsx" path="res://Assets/sprites/attack_accuracy.png" id="3_y8umb"]
 [ext_resource type="Texture2D" uid="uid://dotdks37t6abw" path="res://Assets/sprites/buttons.png" id="4_acboe"]
 [ext_resource type="Texture2D" uid="uid://br84a3hidr828" path="res://Assets/sprites/attack_point.png" id="4_nhds7"]
+[ext_resource type="Script" uid="uid://g32um0mltv5d" path="res://addons/dialogue_manager/dialogue_label.gd" id="5_acboe"]
 [ext_resource type="FontFile" uid="uid://cvtskentvm3va" path="res://Assets/fonts/crypt-of-tomorrow-ut-font-no-rus.ttf" id="5_x1cnf"]
 [ext_resource type="Texture2D" uid="uid://dllu5cwf0ptmj" path="res://Assets/sprites/damn_bird.png" id="6_fmt28"]
+[ext_resource type="Texture2D" uid="uid://dx2cxq5hmn2wk" path="res://Assets/sprites/item_button_disabled.png" id="7_fmt28"]
 [ext_resource type="Texture2D" uid="uid://b7hlbwhg4x07m" path="res://Assets/sprites/soul.png" id="7_gr4uq"]
 [ext_resource type="Script" uid="uid://fgo2tp7pon7l" path="res://scripts/damn_bird_controller.gd" id="7_y8umb"]
 [ext_resource type="Script" uid="uid://b50o5txcocobh" path="res://scripts/soul_controller.gd" id="8_756dn"]
+[ext_resource type="Texture2D" uid="uid://bmv1jkum2r4pi" path="res://Assets/sprites/dialogue_box.png" id="10_x1cnf"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_u3hps"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_y8umb"]
+font_size = 22
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_acboe"]
+bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u3hps"]
 bg_color = Color(1, 0, 0, 1)
@@ -57,8 +66,12 @@ _data = {
 &"attack": SubResource("Animation_nhds7")
 }
 
-[sub_resource type="LabelSettings" id="LabelSettings_y8umb"]
-font_size = 22
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x1cnf"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_x1cnf"]
+font_size = 18
+font_color = Color(0.53, 0.53, 0.53, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_82d4v"]
 texture = ExtResource("4_acboe")
@@ -101,6 +114,9 @@ texture = ExtResource("4_acboe")
 axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 region_rect = Rect2(57, 45, 55, 21)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gr4uq"]
+texture = ExtResource("7_fmt28")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hh1om"]
 texture = ExtResource("4_acboe")
@@ -188,6 +204,10 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 5.0
+offset_right = 2.0
+offset_bottom = 5.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -216,6 +236,7 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 
 [node name="Barriers" type="Control" parent="Ui/MainUi/TextBox"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -262,6 +283,43 @@ position = Vector2(0, -61)
 rotation = 1.5708
 shape = SubResource("WorldBoundaryShape2D_u3hps")
 
+[node name="InfoText" type="Control" parent="Ui/MainUi/TextBox"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Star" type="Label" parent="Ui/MainUi/TextBox/InfoText"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = 18.0
+offset_right = -18.0
+offset_bottom = -19.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "*
+"
+label_settings = SubResource("LabelSettings_y8umb")
+autowrap_mode = 2
+
+[node name="MainText" type="Label" parent="Ui/MainUi/TextBox/InfoText/Star"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 23.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+label_settings = SubResource("LabelSettings_y8umb")
+autowrap_mode = 2
+
 [node name="Target" type="Control" parent="Ui/MainUi/TextBox"]
 visible = false
 layout_mode = 1
@@ -283,6 +341,10 @@ focus_neighbor_right = NodePath(".")
 focus_neighbor_bottom = NodePath(".")
 mouse_filter = 2
 theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxFlat_acboe")
+theme_override_styles/hover = SubResource("StyleBoxFlat_acboe")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_acboe")
+theme_override_styles/normal = SubResource("StyleBoxFlat_acboe")
 button_mask = 0
 text = "* DAMN!!! Bird"
 flat = true
@@ -344,7 +406,8 @@ libraries = {
 &"": SubResource("AnimationLibrary_acboe")
 }
 
-[node name="InfoText" type="Control" parent="Ui/MainUi/TextBox"]
+[node name="ActSelect" type="Control" parent="Ui/MainUi/TextBox"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -352,33 +415,157 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Star" type="Label" parent="Ui/MainUi/TextBox/InfoText"]
+[node name="CheckButton" type="Button" parent="Ui/MainUi/TextBox/ActSelect"]
+layout_mode = 0
+offset_left = 47.0
+offset_top = 11.66
+offset_right = 213.0
+offset_bottom = 50.66
+focus_neighbor_left = NodePath("../Act1Button")
+focus_neighbor_right = NodePath("../Act1Button")
+focus_neighbor_bottom = NodePath(".")
+mouse_filter = 2
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxFlat_x1cnf")
+theme_override_styles/hover = SubResource("StyleBoxFlat_x1cnf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_x1cnf")
+theme_override_styles/normal = SubResource("StyleBoxFlat_x1cnf")
+button_mask = 0
+text = "Check"
+flat = true
+alignment = 0
+
+[node name="Act1Button" type="Button" parent="Ui/MainUi/TextBox/ActSelect"]
+layout_mode = 0
+offset_left = 337.0
+offset_top = 11.66
+offset_right = 503.0
+offset_bottom = 50.66
+focus_neighbor_left = NodePath("../CheckButton")
+focus_neighbor_right = NodePath("../CheckButton")
+focus_neighbor_bottom = NodePath(".")
+mouse_filter = 2
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxFlat_x1cnf")
+theme_override_styles/hover = SubResource("StyleBoxFlat_x1cnf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_x1cnf")
+theme_override_styles/normal = SubResource("StyleBoxFlat_x1cnf")
+button_mask = 0
+text = "Act 1"
+flat = true
+alignment = 0
+
+[node name="ItemSelect" type="Control" parent="Ui/MainUi/TextBox"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 18.0
-offset_top = 18.0
-offset_right = -18.0
-offset_bottom = -19.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "*
+
+[node name="Item1Button" type="Button" parent="Ui/MainUi/TextBox/ItemSelect"]
+layout_mode = 0
+offset_left = 47.0
+offset_top = 11.66
+offset_right = 267.0
+offset_bottom = 50.66
+focus_neighbor_left = NodePath("../Item2Button")
+focus_neighbor_top = NodePath("../Item3Button")
+focus_neighbor_right = NodePath("../Item2Button")
+focus_neighbor_bottom = NodePath("../Item3Button")
+mouse_filter = 2
+theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxFlat_x1cnf")
+theme_override_styles/hover = SubResource("StyleBoxFlat_x1cnf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_x1cnf")
+theme_override_styles/normal = SubResource("StyleBoxFlat_x1cnf")
+button_mask = 0
+text = "item 1
 "
-label_settings = SubResource("LabelSettings_y8umb")
-autowrap_mode = 2
+flat = true
+alignment = 0
 
-[node name="MainText" type="Label" parent="Ui/MainUi/TextBox/InfoText/Star"]
+[node name="Item2Button" type="Button" parent="Ui/MainUi/TextBox/ItemSelect"]
+layout_mode = 0
+offset_left = 337.0
+offset_top = 11.66
+offset_right = 557.0
+offset_bottom = 50.66
+focus_neighbor_left = NodePath("../Item1Button")
+focus_neighbor_top = NodePath("../Item4Button")
+focus_neighbor_right = NodePath("../Item1Button")
+focus_neighbor_bottom = NodePath("../Item4Button")
+mouse_filter = 2
+theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxFlat_x1cnf")
+theme_override_styles/hover = SubResource("StyleBoxFlat_x1cnf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_x1cnf")
+theme_override_styles/normal = SubResource("StyleBoxFlat_x1cnf")
+button_mask = 0
+text = "item 2
+"
+flat = true
+alignment = 0
+
+[node name="Item3Button" type="Button" parent="Ui/MainUi/TextBox/ItemSelect"]
+layout_mode = 0
+offset_left = 47.0
+offset_top = 62.66
+offset_right = 267.0
+offset_bottom = 101.66
+focus_neighbor_left = NodePath("../Item4Button")
+focus_neighbor_top = NodePath("../Item1Button")
+focus_neighbor_right = NodePath("../Item4Button")
+focus_neighbor_bottom = NodePath("../Item1Button")
+mouse_filter = 2
+theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxFlat_x1cnf")
+theme_override_styles/hover = SubResource("StyleBoxFlat_x1cnf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_x1cnf")
+theme_override_styles/normal = SubResource("StyleBoxFlat_x1cnf")
+button_mask = 0
+text = "item 3"
+flat = true
+alignment = 0
+
+[node name="Item4Button" type="Button" parent="Ui/MainUi/TextBox/ItemSelect"]
+layout_mode = 0
+offset_left = 337.0
+offset_top = 62.66
+offset_right = 557.0
+offset_bottom = 101.66
+focus_neighbor_left = NodePath("../Item3Button")
+focus_neighbor_top = NodePath("../Item2Button")
+focus_neighbor_right = NodePath("../Item3Button")
+focus_neighbor_bottom = NodePath("../Item2Button")
+mouse_filter = 2
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxFlat_x1cnf")
+theme_override_styles/hover = SubResource("StyleBoxFlat_x1cnf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_x1cnf")
+theme_override_styles/normal = SubResource("StyleBoxFlat_x1cnf")
+button_mask = 0
+text = "item 4"
+flat = true
+alignment = 0
+
+[node name="ItemInfo" type="Label" parent="Ui/MainUi/TextBox/ItemSelect"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = 2
+anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 23.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-label_settings = SubResource("LabelSettings_y8umb")
-autowrap_mode = 2
+offset_left = 47.0
+offset_top = -48.0
+offset_right = 280.0
+offset_bottom = -12.0
+grow_vertical = 0
+text = "item Info"
+label_settings = SubResource("LabelSettings_x1cnf")
+vertical_alignment = 2
 
 [node name="ActText" type="Control" parent="Ui/MainUi/TextBox"]
 visible = false
@@ -405,7 +592,7 @@ text = "*
 label_settings = SubResource("LabelSettings_y8umb")
 autowrap_mode = 2
 
-[node name="MainText" type="Label" parent="Ui/MainUi/TextBox/ActText/Star"]
+[node name="DialogueLabel" type="RichTextLabel" parent="Ui/MainUi/TextBox/ActText/Star"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -413,17 +600,25 @@ anchor_bottom = 1.0
 offset_left = 23.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "DAMN Bird!!! - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip"
-label_settings = SubResource("LabelSettings_y8umb")
-autowrap_mode = 2
+theme_override_constants/line_separation = 4
+theme_override_font_sizes/normal_font_size = 22
+text = "Dialogue
+1
+2
+3"
+script = ExtResource("5_acboe")
+seconds_per_step = 0.05
+pause_at_characters = "."
+skip_pause_at_abbreviations = PackedStringArray("Mr", "Mrs", "Ms", "Dr", "etc", "eg", "ex")
+metadata/_custom_type_script = "uid://g32um0mltv5d"
 
 [node name="ActionButtons" type="Control" parent="Ui/MainUi"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 43.29
-offset_bottom = 43.29
+offset_top = 416.0
+offset_bottom = 43.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -494,6 +689,7 @@ focus_neighbor_left = NodePath("../ActButton")
 focus_neighbor_right = NodePath("../MercyButton")
 mouse_filter = 2
 theme_override_styles/focus = SubResource("StyleBoxTexture_knq2r")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_gr4uq")
 theme_override_styles/hover = SubResource("StyleBoxTexture_knq2r")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_knq2r")
 theme_override_styles/normal = SubResource("StyleBoxTexture_hh1om")
@@ -572,7 +768,7 @@ offset_bottom = 40.0
 grow_horizontal = 2
 
 [node name="Bondary" type="StaticBody2D" parent="."]
-position = Vector2(318, 385)
+position = Vector2(318, 390)
 
 [node name="ColliderBottom" type="CollisionShape2D" parent="Bondary"]
 position = Vector2(0, 4)
@@ -617,7 +813,55 @@ max_value = 1500.0
 value = 100.0
 show_percentage = false
 
-[node name="Sprite2" type="Sprite2D" parent="."]
+[node name="DialogueBaloon" type="Control" parent="DamnBird"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 50.0
+offset_top = -13.5
+offset_right = 90.0
+offset_bottom = 26.5
+scale = Vector2(0.5, 0.5)
+
+[node name="BaloonPointer" type="Sprite2D" parent="DamnBird/DialogueBaloon"]
+position = Vector2(0, 35)
+texture = ExtResource("10_x1cnf")
+region_enabled = true
+region_rect = Rect2(0, 10, 14, 10)
+
+[node name="NinePatchRect" type="NinePatchRect" parent="DamnBird/DialogueBaloon"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 1.0
+offset_right = 203.0
+offset_bottom = 94.0
+texture = ExtResource("10_x1cnf")
+region_rect = Rect2(12, 0, 32, 32)
+patch_margin_left = 12
+patch_margin_top = 12
+patch_margin_right = 12
+patch_margin_bottom = 12
+
+[node name="DialogueLabel" type="RichTextLabel" parent="DamnBird/DialogueBaloon/NinePatchRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 7.0
+offset_top = 3.0
+offset_right = -4.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_constants/line_separation = 0
+theme_override_font_sizes/normal_font_size = 20
+text = "lkajdshflakjdflkjjadflkjadflkjadflkajdhflkjashdflkjjadflkjdlaksdjf"
+script = ExtResource("5_acboe")
+skip_pause_at_abbreviations = PackedStringArray("Mr", "Mrs", "Ms", "Dr", "etc", "eg", "ex")
+metadata/_custom_type_script = "uid://g32um0mltv5d"
+
+[node name="_SoulSpriteTest" type="Sprite2D" parent="."]
 visible = false
 position = Vector2(51, 277)
 scale = Vector2(2, 2)
@@ -635,5 +879,13 @@ texture = ExtResource("7_gr4uq")
 shape = SubResource("CircleShape2D_u3hps")
 
 [connection signal="button_down" from="Ui/MainUi/TextBox/Target/DamnBirdSelect" to="Ui/MainUi" method="_on_damn_bird_select_button_down"]
+[connection signal="button_down" from="Ui/MainUi/TextBox/ActSelect/CheckButton" to="Ui/MainUi" method="_on_check_button_button_down"]
+[connection signal="button_down" from="Ui/MainUi/TextBox/ActSelect/Act1Button" to="Ui/MainUi" method="_on_act_1_button_button_down"]
+[connection signal="button_down" from="Ui/MainUi/TextBox/ItemSelect/Item1Button" to="Ui/MainUi" method="_on_item_1_button_button_down"]
+[connection signal="button_down" from="Ui/MainUi/TextBox/ItemSelect/Item2Button" to="Ui/MainUi" method="_on_item_2_button_button_down"]
+[connection signal="button_down" from="Ui/MainUi/TextBox/ItemSelect/Item3Button" to="Ui/MainUi" method="_on_item_3_button_button_down"]
+[connection signal="button_down" from="Ui/MainUi/TextBox/ItemSelect/Item4Button" to="Ui/MainUi" method="_on_item_4_button_button_down"]
+[connection signal="finished_typing" from="Ui/MainUi/TextBox/ActText/Star/DialogueLabel" to="Ui/MainUi" method="_on_dialogue_label_finished_typing"]
 [connection signal="button_down" from="Ui/MainUi/ActionButtons/FightButton" to="Ui/MainUi" method="_on_fight_button_button_down"]
 [connection signal="button_down" from="Ui/MainUi/ActionButtons/ActButton" to="Ui/MainUi" method="_on_act_button_button_down"]
+[connection signal="button_down" from="Ui/MainUi/ActionButtons/ItemButton" to="Ui/MainUi" method="_on_item_button_button_down"]

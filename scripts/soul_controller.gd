@@ -7,9 +7,15 @@ signal hit
 const SPEED = 200.0
 const POWER = 150.0
 
-var health := 30
+var health := 10
 var attack := false
 var receiving_damage := true
+var items := [
+	["Bandage", 10, "+10 HP", "bandage"],
+	["Monster Candy", 10, "+10 HP", "monster_candy"],
+	["Nice Cream", 15, "+15 HP", "nice_cream"],
+	["Unisicle", 11, "+11 HP", "unisicle"],
+]
 
 var _damaga_delay := 1.0
 
@@ -25,7 +31,7 @@ func _process(delta: float) -> void:
 	if not receiving_damage:
 		if _damaga_delay > 0:
 			_damaga_delay -= delta
-			sprite.visible = true if sin(Time.get_ticks_msec() / 30) > 0 else false
+			sprite.visible = true if sin(Time.get_ticks_msec() / 30.0) > 0 else false
 		else:
 			_damaga_delay = 1.0
 			sprite.visible = true

@@ -17,5 +17,5 @@ func _on_damn_sfx_finished() -> void:
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("soul"):
 		if body.receiving_damage:
-			body.health -= 1
+			body.health -= 3
 			body.receiving_damage = false
