@@ -7,7 +7,7 @@ signal hit
 const SPEED = 200.0
 const POWER = 150.0
 
-var health := 10
+var health := 30
 var attack := false
 var receiving_damage := true
 var items := [

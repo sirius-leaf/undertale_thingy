@@ -1,0 +1,50 @@
+[gd_scene load_steps=5 format=3 uid="uid://yn8ijsxxncs8"]
+
+[ext_resource type="Script" uid="uid://vauspgfa3qhk" path="res://scripts/leg_attack_controller.gd" id="1_gihbf"]
+[ext_resource type="Texture2D" uid="uid://bv76yco8gqf6m" path="res://Assets/sprites/attack_2_alert.png" id="1_s0ujm"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gihbf"]
+size = Vector2(4, 420)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_htyrl"]
+size = Vector2(4.1213, 293.121)
+
+[node name="LegAttack" type="Area2D" groups=["attack"]]
+script = ExtResource("1_gihbf")
+
+[node name="VerticalCollider" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_gihbf")
+
+[node name="DiagonalRightCollider" type="CollisionShape2D" parent="."]
+position = Vector2(104, -104)
+rotation = 0.785398
+shape = SubResource("RectangleShape2D_htyrl")
+
+[node name="DiagonalLeftCollider" type="CollisionShape2D" parent="."]
+position = Vector2(-104, -104)
+rotation = -0.785398
+shape = SubResource("RectangleShape2D_htyrl")
+
+[node name="VerticalSprite" type="Sprite2D" parent="."]
+scale = Vector2(2, 26.375)
+texture = ExtResource("1_s0ujm")
+region_enabled = true
+region_rect = Rect2(7, 0, 2, 16)
+
+[node name="DiagonalRightSprite" type="Sprite2D" parent="."]
+position = Vector2(92.9739, -92.9739)
+rotation = 0.785398
+scale = Vector2(2, 16.431)
+texture = ExtResource("1_s0ujm")
+region_enabled = true
+region_rect = Rect2(7, 0, 2, 16)
+
+[node name="DiagonalLeftSprite" type="Sprite2D" parent="."]
+position = Vector2(-85.9731, -85.9731)
+rotation = -0.785398
+scale = Vector2(2, 15.1527)
+texture = ExtResource("1_s0ujm")
+region_enabled = true
+region_rect = Rect2(7, 0, 2, 16)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

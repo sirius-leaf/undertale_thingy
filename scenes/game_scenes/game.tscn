@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://bte3mppuixjtp"]
+[gd_scene load_steps=44 format=3 uid="uid://bte3mppuixjtp"]
 
 [ext_resource type="Script" uid="uid://cv2n3trgbtcdc" path="res://scripts/ui_controller.gd" id="1_yn12c"]
 [ext_resource type="Texture2D" uid="uid://c43w6o3udeei7" path="res://Assets/sprites/text_box.png" id="2_nhds7"]
@@ -149,8 +149,6 @@ font_size = 15
 [sub_resource type="LabelSettings" id="LabelSettings_jgxat"]
 font_size = 20
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_uiy1c"]
-
 [sub_resource type="Animation" id="Animation_jgxat"]
 length = 0.001
 tracks/0/type = "bezier"
@@ -200,14 +198,11 @@ radius = 8.0
 layer = -1
 
 [node name="MainUi" type="Control" parent="Ui"]
+unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 2.0
-offset_top = 5.0
-offset_right = 2.0
-offset_bottom = 5.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -215,6 +210,7 @@ size_flags_vertical = 3
 script = ExtResource("1_yn12c")
 
 [node name="TextBox" type="NinePatchRect" parent="Ui/MainUi"]
+unique_name_in_owner = true
 clip_contents = true
 layout_mode = 1
 anchors_preset = 8
@@ -223,9 +219,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -300.0
-offset_top = 4.34
+offset_top = 5.0
 offset_right = 300.0
-offset_bottom = 152.34
+offset_bottom = 153.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_nhds7")
@@ -236,7 +232,6 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 
 [node name="Barriers" type="Control" parent="Ui/MainUi/TextBox"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -251,15 +246,12 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = 557.0
-offset_top = 53.66
-offset_right = 557.0
-offset_bottom = 53.66
+offset_left = -4.0
+offset_right = -4.0
 grow_horizontal = 0
 grow_vertical = 2
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Ui/MainUi/TextBox/Barriers/RightBarrier"]
-position = Vector2(-560, -59)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Ui/MainUi/TextBox/Barriers/RightBarrier/StaticBody2D"]
 rotation = -1.5708
@@ -270,17 +262,46 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 3.0
-offset_top = 53.66
-offset_right = 3.0
-offset_bottom = 53.66
+offset_left = 4.0
+offset_right = 4.0
 grow_vertical = 2
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Ui/MainUi/TextBox/Barriers/LeftBarrier"]
-position = Vector2(0, -61)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Ui/MainUi/TextBox/Barriers/LeftBarrier/StaticBody2D"]
 rotation = 1.5708
+shape = SubResource("WorldBoundaryShape2D_u3hps")
+
+[node name="TopBarrier" type="Control" parent="Ui/MainUi/TextBox/Barriers"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+grow_horizontal = 2
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Ui/MainUi/TextBox/Barriers/TopBarrier"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ui/MainUi/TextBox/Barriers/TopBarrier/StaticBody2D"]
+position = Vector2(0, 4)
+rotation = 3.14159
+shape = SubResource("WorldBoundaryShape2D_u3hps")
+
+[node name="BottomBarrier" type="Control" parent="Ui/MainUi/TextBox/Barriers"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Ui/MainUi/TextBox/Barriers/BottomBarrier"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ui/MainUi/TextBox/Barriers/BottomBarrier/StaticBody2D"]
+position = Vector2(0, 4)
 shape = SubResource("WorldBoundaryShape2D_u3hps")
 
 [node name="InfoText" type="Control" parent="Ui/MainUi/TextBox"]
@@ -767,41 +788,35 @@ offset_right = 74.0
 offset_bottom = 40.0
 grow_horizontal = 2
 
-[node name="Bondary" type="StaticBody2D" parent="."]
-position = Vector2(318, 390)
+[node name="EnemyLayer" type="CanvasLayer" parent="."]
+layer = -2
 
-[node name="ColliderBottom" type="CollisionShape2D" parent="Bondary"]
-position = Vector2(0, 4)
-shape = SubResource("WorldBoundaryShape2D_uiy1c")
-
-[node name="ColliderTop" type="CollisionShape2D" parent="Bondary"]
-position = Vector2(0, -138)
-rotation = 3.14159
-shape = SubResource("WorldBoundaryShape2D_uiy1c")
-
-[node name="DamnBird" type="Node2D" parent="."]
+[node name="DamnBird" type="Node2D" parent="EnemyLayer"]
+unique_name_in_owner = true
+z_index = -3
+y_sort_enabled = true
 position = Vector2(323, 50)
 scale = Vector2(2, 2)
 script = ExtResource("7_y8umb")
 
-[node name="Body" type="Sprite2D" parent="DamnBird"]
+[node name="Body" type="Sprite2D" parent="EnemyLayer/DamnBird"]
 texture = ExtResource("6_fmt28")
 region_enabled = true
 region_rect = Rect2(1, 1, 83, 45)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="DamnBird/Body"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="EnemyLayer/DamnBird/Body"]
 libraries = {
 &"": SubResource("AnimationLibrary_u3hps")
 }
 autoplay = "damn_bird_idle"
 
-[node name="Leg" type="Sprite2D" parent="DamnBird"]
+[node name="Leg" type="Sprite2D" parent="EnemyLayer/DamnBird"]
 position = Vector2(3.5, 58)
 texture = ExtResource("6_fmt28")
 region_enabled = true
 region_rect = Rect2(1, 47, 76, 73)
 
-[node name="DamnBirdHealthBar2" type="ProgressBar" parent="DamnBird"]
+[node name="DamnBirdHealthBar2" type="ProgressBar" parent="EnemyLayer/DamnBird"]
 visible = false
 offset_left = -78.0
 offset_top = 61.5
@@ -813,7 +828,7 @@ max_value = 1500.0
 value = 100.0
 show_percentage = false
 
-[node name="DialogueBaloon" type="Control" parent="DamnBird"]
+[node name="DialogueBaloon" type="Control" parent="EnemyLayer/DamnBird"]
 visible = false
 layout_mode = 3
 anchors_preset = 0
@@ -823,13 +838,13 @@ offset_right = 90.0
 offset_bottom = 26.5
 scale = Vector2(0.5, 0.5)
 
-[node name="BaloonPointer" type="Sprite2D" parent="DamnBird/DialogueBaloon"]
+[node name="BaloonPointer" type="Sprite2D" parent="EnemyLayer/DamnBird/DialogueBaloon"]
 position = Vector2(0, 35)
 texture = ExtResource("10_x1cnf")
 region_enabled = true
 region_rect = Rect2(0, 10, 14, 10)
 
-[node name="NinePatchRect" type="NinePatchRect" parent="DamnBird/DialogueBaloon"]
+[node name="NinePatchRect" type="NinePatchRect" parent="EnemyLayer/DamnBird/DialogueBaloon"]
 layout_mode = 0
 offset_left = 5.0
 offset_top = 1.0
@@ -842,7 +857,7 @@ patch_margin_top = 12
 patch_margin_right = 12
 patch_margin_bottom = 12
 
-[node name="DialogueLabel" type="RichTextLabel" parent="DamnBird/DialogueBaloon/NinePatchRect"]
+[node name="DialogueLabel" type="RichTextLabel" parent="EnemyLayer/DamnBird/DialogueBaloon/NinePatchRect"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -868,6 +883,7 @@ scale = Vector2(2, 2)
 texture = ExtResource("7_gr4uq")
 
 [node name="Soul" type="CharacterBody2D" parent="." groups=["soul"]]
+unique_name_in_owner = true
 position = Vector2(38, 454)
 script = ExtResource("8_756dn")
 
@@ -889,3 +905,4 @@ shape = SubResource("CircleShape2D_u3hps")
 [connection signal="button_down" from="Ui/MainUi/ActionButtons/FightButton" to="Ui/MainUi" method="_on_fight_button_button_down"]
 [connection signal="button_down" from="Ui/MainUi/ActionButtons/ActButton" to="Ui/MainUi" method="_on_act_button_button_down"]
 [connection signal="button_down" from="Ui/MainUi/ActionButtons/ItemButton" to="Ui/MainUi" method="_on_item_button_button_down"]
+[connection signal="button_down" from="Ui/MainUi/ActionButtons/MercyButton" to="Ui/MainUi" method="_on_mercy_button_button_down"]

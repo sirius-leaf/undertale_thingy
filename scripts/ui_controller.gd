@@ -9,32 +9,37 @@ enum Action {
 const ATTACK_SPEED = 300.0
 const DAMN_BIRD_DIALOGUE = preload("res://dialogue/damn_bird_dialogue.dialogue")
 
+var attack_type: int
+
 var _selected_action: Action
 var _attack_start := true
 var _accept_input := false
-var _delay := 0.0
 var _tween_start := true
-var _buttons: Array[Button]
-var _act_buttons: Array[Button]
-var _last_selected_act := 0
 var _dialogue_finished := false
 var _enemy_dialogue_finished := false
 var _fight_ready := false
-var _item_select_buttons: Array[Button]
 var _empty_item := false
+var _select_attack_type := true
+var _delay := 0.0
+var _last_selected_act := 0
+var _buttons: Array[Button]
+var _act_buttons: Array[Button]
+var _item_select_buttons: Array[Button]
 
 @onready var target: Control = $TextBox/Target
 @onready var soul: SoulController = $"../../Soul"
 @onready var attack_point: Control = $TextBox/AttackAccuracy/AttackPoint
-@onready var damn_bird: DamnBirdController = $"../../DamnBird"
+@onready var damn_bird: DamnBirdController = %DamnBird
 @onready var damn_bird_health_bar: ProgressBar = $TextBox/Target/DamnBirdSelect/DamnBirdHealthBar
-@onready var damn_bird_health_bar_2: ProgressBar = $"../../DamnBird/DamnBirdHealthBar2"
+@onready var damn_bird_health_bar_2: ProgressBar = %DamnBird/DamnBirdHealthBar2
 @onready var info_text: Control = $TextBox/InfoText
 @onready var health_bar: ProgressBar = $HealthInfo/HealthBar
 @onready var health_label: Label = $HealthInfo/HealthLabel
+@onready var text_box: NinePatchRect = $TextBox
 
 
 func _ready() -> void:
+	info_text.visible = true
 	damn_bird_health_bar.value = damn_bird.health
 	damn_bird_health_bar_2.value = damn_bird.health
 	health_bar.value = soul.health
@@ -47,7 +52,7 @@ func _ready() -> void:
 	for node in $TextBox/ItemSelect.get_children(): if node is Button: 
 		_item_select_buttons.append(node)
 	
-	$"../../DamnBird/DialogueBaloon/NinePatchRect/DialogueLabel".finished_typing.\
+	%DamnBird/DialogueBaloon/NinePatchRect/DialogueLabel.finished_typing.\
 			connect(_on_enemy_dialogue_finished)
 	
 	$ActionButtons/FightButton.grab_focus()
@@ -56,7 +61,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if Input.is_key_pressed(KEY_R): get_tree().reload_current_scene()
 	elif Input.is_key_pressed(KEY_ESCAPE): get_tree().quit()
-		
+	
+	text_box.position = Vector2(320.0 - text_box.size.x / 2.0, 480.0 - text_box.size.y - 87.0)
 	
 	match _selected_action:
 		Action.FIGHT:
@@ -85,7 +91,7 @@ func _process(delta: float) -> void:
 			if Input.is_action_just_pressed("ui_accept") and _dialogue_finished:
 				_selected_action = Action.ENEMY_TURN
 				$TextBox/ActText.visible = false
-				_fight_transition_tween(Action.ACT)
+				_attack_type_select(Action.ACT)
 		Action.ITEM:
 			for item in _item_select_buttons:
 				if item.has_focus():
@@ -101,7 +107,7 @@ func _process(delta: float) -> void:
 					_fight_ready:
 				soul.visible = true
 				soul.attack = true
-				$"../../DamnBird/DialogueBaloon".visible = false
+				%DamnBird/DialogueBaloon.visible = false
 		Action.NONE:
 			target.visible = false
 			soul.visible = true
@@ -115,10 +121,12 @@ func _process(delta: float) -> void:
 
 func reset() -> void:
 	var tween_size := create_tween()
-	var tween_pos := create_tween()
+	var tween_size_y := create_tween()
+	#var tween_pos := create_tween()
 	
 	tween_size.tween_property($TextBox, "size:x", 600.0, 0.5)
-	tween_pos.tween_property($TextBox, "position:x", 20.0, 0.5)
+	tween_size_y.tween_property($TextBox, "size:y", 148.0, 0.5)
+	#tween_pos.tween_property($TextBox, "position:x", 20.0, 0.5)
 	tween_size.finished.connect(_on_tween_finished_reset)
 	$TextBox/AttackAccuracy/AttackAccuracyTexture.modulate.a = 1.0 
 	
@@ -180,28 +188,45 @@ func _attack_end(delta: float) -> void:
 		attack_point.visible = false
 		damn_bird_health_bar_2.visible = false
 	
-		_fight_transition_tween(Action.FIGHT)
+		_attack_type_select(Action.FIGHT)
 
 
-func _fight_transition_tween(previous_action: Action) -> void:
+func _attack_type_select(action: Action, override_attack_type := -1) -> void:
+	var box_size: Vector2
+	if _select_attack_type:
+		if override_attack_type < 0: attack_type = randi_range(0, 1)
+		else: attack_type = override_attack_type
+		_select_attack_type = false
+	
+	match attack_type:
+		0: box_size = Vector2(148.0, 148.0)
+		1: box_size = Vector2(180.0, 180.0)
+	
+	_fight_transition_tween(action, box_size)
+
+
+func _fight_transition_tween(previous_action: Action, box_size := Vector2(148.0, 148.0)) -> void:
 	if _tween_start:
-			var tween_size := create_tween()
-			var tween_pos := create_tween()
-			
-			tween_size.tween_property($TextBox, "size:x", 148.0, 0.5)
-			tween_pos.tween_property($TextBox, "position:x", 246.0, 0.5)
-			
-			_start_enemy_dialogue()
-			
-			match previous_action:
-				Action.FIGHT:
-					var tween_opacity := create_tween()
-					tween_opacity.tween_property($TextBox/AttackAccuracy/AttackAccuracyTexture, 
-							"modulate:a", 0.0, 0.3)
-			
-			tween_size.finished.connect(_on_tween_finished)
-			
-			_tween_start = false
+		var tween_size := create_tween()
+		var tween_size_y := create_tween()
+		#var tween_pos := create_tween()
+		
+		tween_size.tween_property(text_box, "size:x", box_size.x, 0.5)
+		tween_size_y.tween_property(text_box, "size:y", box_size.y, 0.5)
+		#tween_pos.tween_property($TextBox, "position:x", 246.0, 0.5)
+		#text_box.position = Vector2(320.0 - text_box.size.x / 2.0, 480.0 - text_box.size.y - 87.0)
+		
+		_start_enemy_dialogue()
+		
+		match previous_action:
+			Action.FIGHT:
+				var tween_opacity := create_tween()
+				tween_opacity.tween_property($TextBox/AttackAccuracy/AttackAccuracyTexture, 
+						"modulate:a", 0.0, 0.3)
+		
+		tween_size.finished.connect(_on_tween_finished)
+		
+		_tween_start = false
 
 
 func _act_button_dialogue(line_name: String) -> void:
@@ -229,9 +254,9 @@ func _back_to_main_act(previous_button: Button) -> void:
 
 
 func _start_enemy_dialogue() -> void:
-	var enemy_dialogue: DialogueLabel = $"../../DamnBird/DialogueBaloon/NinePatchRect/DialogueLabel"
+	var enemy_dialogue: DialogueLabel = %DamnBird/DialogueBaloon/NinePatchRect/DialogueLabel
 	
-	$"../../DamnBird/DialogueBaloon".visible = true
+	%DamnBird/DialogueBaloon.visible = true
 	enemy_dialogue.dialogue_line = await DAMN_BIRD_DIALOGUE.get_next_dialogue_line("start")
 	enemy_dialogue.type_out()
 
@@ -256,6 +281,7 @@ func _on_tween_finished_reset():
 	_dialogue_finished = false
 	_enemy_dialogue_finished = false
 	_fight_ready = false
+	_select_attack_type = true
 	
 	$ActionButtons/FightButton.grab_focus()
 	_selected_action = Action.NONE
@@ -339,3 +365,11 @@ func _on_item_3_button_button_down() -> void:
 
 func _on_item_4_button_button_down() -> void:
 	_use_item(3)
+
+
+func _on_mercy_button_button_down() -> void:
+	_selected_action = Action.ENEMY_TURN
+	info_text.visible = false
+	soul.global_position = Vector2(-20, -20)
+	$ActionButtons/MercyButton.release_focus()
+	_attack_type_select(Action.MERCY)
