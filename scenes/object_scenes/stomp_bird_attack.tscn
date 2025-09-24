@@ -1,0 +1,358 @@
+[gd_scene load_steps=6 format=3 uid="uid://bf3g353bckevb"]
+
+[ext_resource type="Script" uid="uid://ccxrbx3ovcxjq" path="res://scripts/stomp_bird_attack.gd" id="1_5wo2i"]
+[ext_resource type="Texture2D" uid="uid://c4f5udl1ycbhk" path="res://Assets/sprites/stomp_ground.png" id="1_6sc3v"]
+
+[sub_resource type="Animation" id="Animation_6sc3v"]
+resource_name = "ground_wave"
+length = 1.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GroundRight/ColliderRight1:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(0.33, 3, 1),
+"update": 0,
+"values": [Vector2(0, 22), Vector2(0, 0), Vector2(0, 22)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GroundRight/ColliderLeft1:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(0.33, 3, 1),
+"update": 0,
+"values": [Vector2(-36, 22), Vector2(-36, 0), Vector2(-36, 22)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("GroundRight/ColliderRight2:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.1, 0.6, 1.1),
+"transitions": PackedFloat32Array(0.33, 3, 1),
+"update": 0,
+"values": [Vector2(36, 22), Vector2(36, -24), Vector2(36, 22)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("GroundRight/ColliderLeft2:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.1, 0.6, 1.1),
+"transitions": PackedFloat32Array(0.33, 3, 1),
+"update": 0,
+"values": [Vector2(-72, 22), Vector2(-72, -24), Vector2(-72, 22)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("GroundRight/ColliderRight3:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.2, 0.7, 1.2),
+"transitions": PackedFloat32Array(0.33, 3, 1),
+"update": 0,
+"values": [Vector2(72, 22), Vector2(72, -48), Vector2(72, 22)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("GroundRight/ColliderLeft3:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.2, 0.7, 1.2),
+"transitions": PackedFloat32Array(0.33, 3, 1),
+"update": 0,
+"values": [Vector2(-108, 22), Vector2(-108, -48), Vector2(-108, 22)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("GroundRight/ColliderRight4:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.3, 0.8, 1.3),
+"transitions": PackedFloat32Array(0.33, 3, 1),
+"update": 0,
+"values": [Vector2(108, 22), Vector2(108, -72), Vector2(108, 22)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("GroundRight/ColliderLeft4:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.3, 0.8, 1.3),
+"transitions": PackedFloat32Array(0.33, 3, 1),
+"update": 0,
+"values": [Vector2(-144, 22), Vector2(-144, -72), Vector2(-144, 22)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("GroundRight/ColliderRight5:position")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0.4, 0.9, 1.4),
+"transitions": PackedFloat32Array(0.3, 3, 1),
+"update": 0,
+"values": [Vector2(144, 22), Vector2(144, -96), Vector2(144, 22)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("GroundRight/ColliderLeft5:position")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0.4, 0.9, 1.4),
+"transitions": PackedFloat32Array(0.33, 3, 1),
+"update": 0,
+"values": [Vector2(-180, 22), Vector2(-180, -96), Vector2(-180, 22)]
+}
+
+[sub_resource type="Animation" id="Animation_5wo2i"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GroundRight/ColliderRight1:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GroundRight/ColliderLeft1:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-36, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("GroundRight/ColliderRight2:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(36, -24)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("GroundRight/ColliderLeft2:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-72, -24)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("GroundRight/ColliderRight3:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(72, -48)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("GroundRight/ColliderLeft3:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-108, -48)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("GroundRight/ColliderRight4:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(108, -72)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("GroundRight/ColliderLeft4:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-144, -72)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("GroundRight/ColliderRight5:position")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(144, -96)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("GroundRight/ColliderLeft5:position")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-180, -96)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_voyjn"]
+_data = {
+&"RESET": SubResource("Animation_5wo2i"),
+&"ground_wave": SubResource("Animation_6sc3v")
+}
+
+[node name="StompBirdAttack" type="Control" groups=["attack"]]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_5wo2i")
+
+[node name="GroundRight" type="Area2D" parent="."]
+position = Vector2(18, 58)
+
+[node name="ColliderRight1" type="CollisionPolygon2D" parent="GroundRight"]
+polygon = PackedVector2Array(-18, -54, 18, -78, 18, 80, -18, 80)
+
+[node name="Sprite2D" type="Sprite2D" parent="GroundRight/ColliderRight1"]
+scale = Vector2(2, 2)
+texture = ExtResource("1_6sc3v")
+
+[node name="ColliderLeft1" type="CollisionPolygon2D" parent="GroundRight"]
+position = Vector2(-36, 0)
+polygon = PackedVector2Array(-18, -78, 18, -54, 18, 80, -18, 80)
+
+[node name="Sprite2D" type="Sprite2D" parent="GroundRight/ColliderLeft1"]
+scale = Vector2(2, 2)
+texture = ExtResource("1_6sc3v")
+flip_h = true
+
+[node name="ColliderRight2" type="CollisionPolygon2D" parent="GroundRight"]
+position = Vector2(36, -24)
+polygon = PackedVector2Array(-18, -54, 18, -78, 18, 80, -18, 80)
+
+[node name="Sprite2D" type="Sprite2D" parent="GroundRight/ColliderRight2"]
+scale = Vector2(2, 2)
+texture = ExtResource("1_6sc3v")
+
+[node name="ColliderLeft2" type="CollisionPolygon2D" parent="GroundRight"]
+position = Vector2(-72, -24)
+polygon = PackedVector2Array(-18, -78, 18, -54, 18, 80, -18, 80)
+
+[node name="Sprite2D" type="Sprite2D" parent="GroundRight/ColliderLeft2"]
+scale = Vector2(2, 2)
+texture = ExtResource("1_6sc3v")
+flip_h = true
+
+[node name="ColliderRight3" type="CollisionPolygon2D" parent="GroundRight"]
+position = Vector2(72, -48)
+polygon = PackedVector2Array(-18, -54, 18, -78, 18, 80, -18, 80)
+
+[node name="Sprite2D" type="Sprite2D" parent="GroundRight/ColliderRight3"]
+scale = Vector2(2, 2)
+texture = ExtResource("1_6sc3v")
+
+[node name="ColliderLeft3" type="CollisionPolygon2D" parent="GroundRight"]
+position = Vector2(-108, -48)
+polygon = PackedVector2Array(-18, -78, 18, -54, 18, 80, -18, 80)
+
+[node name="Sprite2D" type="Sprite2D" parent="GroundRight/ColliderLeft3"]
+scale = Vector2(2, 2)
+texture = ExtResource("1_6sc3v")
+flip_h = true
+
+[node name="ColliderRight4" type="CollisionPolygon2D" parent="GroundRight"]
+position = Vector2(108, -72)
+polygon = PackedVector2Array(-18, -54, 18, -78, 18, 80, -18, 80)
+
+[node name="Sprite2D" type="Sprite2D" parent="GroundRight/ColliderRight4"]
+scale = Vector2(2, 2)
+texture = ExtResource("1_6sc3v")
+
+[node name="ColliderLeft4" type="CollisionPolygon2D" parent="GroundRight"]
+position = Vector2(-144, -72)
+polygon = PackedVector2Array(-18, -78, 18, -54, 18, 80, -18, 80)
+
+[node name="Sprite2D" type="Sprite2D" parent="GroundRight/ColliderLeft4"]
+scale = Vector2(2, 2)
+texture = ExtResource("1_6sc3v")
+flip_h = true
+
+[node name="ColliderRight5" type="CollisionPolygon2D" parent="GroundRight"]
+position = Vector2(144, -96)
+polygon = PackedVector2Array(-18, -54, 18, -78, 18, 80, -18, 80)
+
+[node name="Sprite2D" type="Sprite2D" parent="GroundRight/ColliderRight5"]
+scale = Vector2(2, 2)
+texture = ExtResource("1_6sc3v")
+
+[node name="ColliderLeft5" type="CollisionPolygon2D" parent="GroundRight"]
+position = Vector2(-180, -96)
+polygon = PackedVector2Array(-18, -78, 18, -54, 18, 80, -18, 80)
+
+[node name="Sprite2D" type="Sprite2D" parent="GroundRight/ColliderLeft5"]
+scale = Vector2(2, 2)
+texture = ExtResource("1_6sc3v")
+flip_h = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_voyjn")
+}
+autoplay = "ground_wave"
+
+[connection signal="body_entered" from="GroundRight" to="." method="_on_ground_right_body_entered"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

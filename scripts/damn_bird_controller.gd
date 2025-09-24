@@ -4,6 +4,7 @@ extends Node2D
 
 const DAMN_ATTACK_WARNING = preload("res://scenes/object_scenes/damn_attack_warning.tscn")
 const LEG_ATTACK_WARNING = preload("res://scenes/object_scenes/leg_attack_warning.tscn")
+const STOMP_BIRD = preload("res://scenes/object_scenes/stomp_bird.tscn")
 
 var health := 1500
 
@@ -20,17 +21,12 @@ var _attack_type: int
 @onready var main_ui: UiController = %MainUi
 
 
-func _ready() -> void:
-	pass
-
-
 func _process(delta: float) -> void:
 	if soul.attack:
 		if _attack_started:
 			_attack_type = randi_range(0, 1)
 			_attack_started = false 
 		
-		#attack(1, delta)
 		attack(main_ui.attack_type, delta)
 		
 		if _attack_duration > 0: _attack_duration -= delta
@@ -47,6 +43,21 @@ func _process(delta: float) -> void:
 			soul.attack = false
 	else:
 		_attack_started = true
+
+
+func _start_attack_delay(delta: float) -> void:
+	if _delay > 0:
+		_delay -= delta
+	elif _battle_start:
+		_attack_order += 1
+
+
+func _start_attack(attack_duration := [4.0, 8.0]) -> void:
+	if not _battle_start:
+		_delay = 0.5
+		_attack_duration = randf_range(attack_duration[0], attack_duration[1])
+		
+		_battle_start = true
 
 
 func attack(type: int, delta: float) -> void:
@@ -81,18 +92,13 @@ func attack(type: int, delta: float) -> void:
 					
 					_delay = 1.0
 					_attack_order = 0
-
-
-func _start_attack_delay(delta: float) -> void:
-	if _delay > 0:
-		_delay -= delta
-	elif _battle_start:
-		_attack_order += 1
-
-
-func _start_attack() -> void:
-	if not _battle_start:
-		_delay = 0.5
-		_attack_duration = randf_range(4.0, 8.0)
-		
-		_battle_start = true
+		2:
+			if not _battle_start:
+				var bird_stomp: Control = STOMP_BIRD.instantiate()
+				
+				_start_attack([8.0, 12.0])
+				
+				bird_stomp.position = text_box.global_position + Vector2(50.0 + randi_range(0, 1) * 170, 180.0)
+				text_box.add_child(bird_stomp)
+				bird_stomp.soul = soul
+				bird_stomp.text_box = text_box

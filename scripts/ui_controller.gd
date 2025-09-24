@@ -22,6 +22,7 @@ var _empty_item := false
 var _select_attack_type := true
 var _delay := 0.0
 var _last_selected_act := 0
+var _last_selected_main_act := 0
 var _buttons: Array[Button]
 var _act_buttons: Array[Button]
 var _item_select_buttons: Array[Button]
@@ -201,6 +202,7 @@ func _attack_type_select(action: Action, override_attack_type := -1) -> void:
 	match attack_type:
 		0: box_size = Vector2(148.0, 148.0)
 		1: box_size = Vector2(180.0, 180.0)
+		2: box_size = Vector2(270.0, 180.0)
 	
 	_fight_transition_tween(action, box_size)
 
@@ -283,7 +285,16 @@ func _on_tween_finished_reset():
 	_fight_ready = false
 	_select_attack_type = true
 	
-	$ActionButtons/FightButton.grab_focus()
+	match _last_selected_main_act:
+		0:
+			$ActionButtons/FightButton.grab_focus()
+		1:
+			$ActionButtons/ActButton.grab_focus()
+		2:
+			$ActionButtons/ItemButton.grab_focus()
+		3:
+			$ActionButtons/MercyButton.grab_focus()
+
 	_selected_action = Action.NONE
 	attack_point.visible = true
 	info_text.visible = true
@@ -298,6 +309,7 @@ func _on_fight_button_button_down() -> void:
 	info_text.visible = false
 	target.visible = true
 	_selected_action = Action.FIGHT
+	_last_selected_main_act = 0
 	$ActionButtons/FightButton.release_focus()
 	$TextBox/Target/DamnBirdSelect.grab_focus()
 	soul.global_position = $TextBox/Target/DamnBirdSelect.global_position + Vector2(-16.0, 21.0)
@@ -308,6 +320,7 @@ func _on_act_button_button_down() -> void:
 	target.visible = true
 	$TextBox/Target/DamnBirdSelect/DamnBirdHealthBar.visible = false
 	_selected_action = Action.ACT
+	_last_selected_main_act = 1
 	$ActionButtons/ActButton.release_focus()
 	$TextBox/Target/DamnBirdSelect.grab_focus()
 	soul.global_position = $TextBox/Target/DamnBirdSelect.global_position + Vector2(-16.0, 21.0)
@@ -323,6 +336,7 @@ func _on_item_button_button_down() -> void:
 	info_text.visible = false
 	$TextBox/ItemSelect.visible = true
 	_selected_action = Action.ITEM
+	_last_selected_main_act = 2
 	$ActionButtons/ItemButton.release_focus()
 	$TextBox/ItemSelect/Item1Button.grab_focus()
 	soul.global_position = $TextBox/ItemSelect/Item1Button.global_position + Vector2(-16.0, 21.0)
@@ -371,5 +385,6 @@ func _on_mercy_button_button_down() -> void:
 	_selected_action = Action.ENEMY_TURN
 	info_text.visible = false
 	soul.global_position = Vector2(-20, -20)
+	_last_selected_main_act = 3
 	$ActionButtons/MercyButton.release_focus()
-	_attack_type_select(Action.MERCY)
+	_attack_type_select(Action.MERCY, 2)

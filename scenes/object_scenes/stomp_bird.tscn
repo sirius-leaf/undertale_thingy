@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://cxoqh5uopyi8f"]
+
+[ext_resource type="Script" uid="uid://5vyv40laekbh" path="res://scripts/stomp_bird_controller.gd" id="1_41iyd"]
+[ext_resource type="Texture2D" uid="uid://cuvse2fbsyn2g" path="res://Assets/sprites/stomp_bird.png" id="1_r3246"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_41iyd"]
+radius = 14.0
+height = 34.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2ipek"]
+radius = 2.0
+height = 38.0
+
+[node name="StompBird" type="Control" groups=["attack"]]
+top_level = true
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_41iyd")
+
+[node name="BirdTexture" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -19.0
+offset_top = -66.0
+offset_right = 33.0
+offset_bottom = 4.0
+texture = ExtResource("1_r3246")
+
+[node name="Area2D" type="Area2D" parent="BirdTexture"]
+position = Vector2(19, 16)
+
+[node name="BodyCollider" type="CollisionShape2D" parent="BirdTexture/Area2D"]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_41iyd")
+
+[node name="LegCollider" type="CollisionShape2D" parent="BirdTexture/Area2D"]
+position = Vector2(0, 33)
+shape = SubResource("CapsuleShape2D_2ipek")
+
+[connection signal="body_entered" from="BirdTexture/Area2D" to="." method="_on_area_2d_body_entered"]

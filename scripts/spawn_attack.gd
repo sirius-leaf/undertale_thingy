@@ -1,10 +1,10 @@
 extends Control
 
 
-var _delay := 1.0
-
 @export var attack_type := 0
 @export var attack: PackedScene
+
+var _delay := 1.0
 
 
 func _process(delta: float) -> void:
@@ -18,7 +18,7 @@ func _process(delta: float) -> void:
 				attack_instance.position = Vector2(148.0, 14.0 + position.y)
 				
 			1:
-				attack_instance.position = position
+				attack_instance.position = position + Vector2(16.0, 16.0)
 				attack_instance.rotation_degrees = rotation_degrees
 		
 		add_sibling(attack_instance)
